@@ -1,13 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
 	xsi:schemaLocation="
         http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
-	
-	<import resource="classpath:connection.xml"/>
 
+	<import resource="classpath:connection.xml" />
+
+	<bean id="validator" class="com.training.validator.UserValidator"></bean>
+
+	<bean id="userService" class="com.training.service.impl.UserServiceImpl">
+		<property name="userDao" ref="userDao"></property>
+		<property name="commonService" ref="commonService"></property>
+	</bean>
+	
+	<bean id="userDao" class="com.training.dao.impl.UserDaoImpl"></bean>
+	<bean id="commonService" class="com.training.common.service.CommonService">
+		<property name="commonDao" ref="commonDao"></property>
+	</bean>
+	
+	<bean id="commonDao" class="com.training.common.dao.CommonDao">
+		<property name="sessionFactory" ref="mySessionFactory"></property>
+		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	</bean>
 </beans>

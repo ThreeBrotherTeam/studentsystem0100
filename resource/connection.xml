@@ -31,13 +31,15 @@
 		<property name="dataSource" ref="myDataSource" />
 		<property name="packagesToScan">
 			<list>
-				<value>com.shsxt.model</value>
+				<value>com.training.model</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
 			<value>
 				hibernate.dialect=org.hibernate.dialect.MySQLDialect
 				hibernate.hbm2ddl.auto=update
+				hibernate.show_sql=true
+				hibernate.format_sql=true
 			</value>
 		</property>
 	</bean>
