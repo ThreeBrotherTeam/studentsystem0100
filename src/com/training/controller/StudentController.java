@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.training.common.config.Config;
@@ -32,5 +33,16 @@ public class StudentController {
 		SearchResult<StudentData> searchResult = studentService.findAll(studentForm, page);
 		model.addAttribute("searchResult", searchResult);
 		return "users/students";
+	}
+
+	@RequestMapping("/addStudent")
+	public String add() {
+		return "users/add";
+	}
+
+	@RequestMapping(value = "/addStudent", method = RequestMethod.POST)
+	public String add(StudentForm studentForm) {
+		studentService.add(studentForm);
+		return "redirect:loadStudentsByFields";
 	}
 }

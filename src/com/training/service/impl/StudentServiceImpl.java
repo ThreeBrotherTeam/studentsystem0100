@@ -22,6 +22,7 @@ public class StudentServiceImpl implements StudentService {
 	private StudentDao studentDao;
 	private CommonService commonService;
 	private Convert<StudentModel, StudentData> studentConvert;
+	private Convert<StudentForm, StudentModel> convertFrom2model;
 
 	@Override
 	public SearchResult<StudentData> findAll(StudentForm studentForm, Pagination page) {
@@ -41,6 +42,12 @@ public class StudentServiceImpl implements StudentService {
 		results.setPagination(searchResults.getPagination());
 		results.setResult(datas);
 		return results;
+	}
+
+	@Override
+	public void add(StudentForm studentForm) {
+		StudentModel studentModel = convertFrom2model.convert(studentForm);
+		commonService.saveOrUpdateEntity(studentModel);
 	}
 
 	public StudentDao getStudentDao() {
@@ -65,6 +72,14 @@ public class StudentServiceImpl implements StudentService {
 
 	public void setStudentConvert(Convert<StudentModel, StudentData> studentConvert) {
 		this.studentConvert = studentConvert;
+	}
+
+	public Convert<StudentForm, StudentModel> getConvertFrom2model() {
+		return convertFrom2model;
+	}
+
+	public void setConvertFrom2model(Convert<StudentForm, StudentModel> convertFrom2model) {
+		this.convertFrom2model = convertFrom2model;
 	}
 
 }

@@ -9,4 +9,6 @@ public interface StudentService {
 
 	SearchResult<StudentData> findAll(StudentForm studentForm, Pagination page);
 
+	void add(StudentForm studentForm);
+
 }
