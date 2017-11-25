@@ -59,7 +59,7 @@
 
 	<aop:config>
 		<aop:pointcut id="txPointcut"
-			expression="execution(* com.shsxt.service..*.*(..))" />
+			expression="execution(* com.training.service..*.*(..))" />
 		<aop:advisor advice-ref="txAdvice" pointcut-ref="txPointcut" />
 	</aop:config>
 	
