@@ -10,8 +10,10 @@
 		http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-	<context:component-scan base-package="com.shsxt.controller" />
+	<context:component-scan base-package="com.training.controller" />
 
+	<mvc:resources location="/ui/" mapping="/ui/**"/>
+	
 	<mvc:annotation-driven />
 
 	<bean id="jspViewResolver"
