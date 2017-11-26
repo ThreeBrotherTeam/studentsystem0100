@@ -7,6 +7,7 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
+
 	<import resource="classpath:connection.xml" />
 
 	<bean id="validator" class="com.training.validator.UserValidator"></bean>
@@ -17,12 +18,17 @@
 	</bean>
 	
 	<bean id="userDao" class="com.training.dao.impl.UserDaoImpl"></bean>
-	<bean id="commonService" class="com.training.common.service.CommonService">
-		<property name="commonDao" ref="commonDao"></property>
+	
+	<bean id="studentDao" class="com.training.dao.impl.StudentDaoImpl">
+		<property name="commonDao" ref="commonDao"/>
 	</bean>
 	
-	<bean id="commonDao" class="com.training.common.dao.CommonDao">
-		<property name="sessionFactory" ref="mySessionFactory"></property>
-		<property name="jdbcTemplate" ref="jdbcTemplate"></property>
+	<bean id="studentConvert" class="com.training.convert.impl.StudentConvert"></bean>
+	
+	<bean id="studentService" class="com.training.service.impl.StudentServiceImpl">
+		<property name="studentDao" ref="studentDao"/>
+		<property name="commonService" ref="commonService"/>
+		<property name="studentConvert" ref="studentConvert"></property>
 	</bean>
+
 </beans>

@@ -6,7 +6,8 @@ import java.util.Map;
 import com.training.common.dao.CommonDao;
 
 public class CommonService {
-	
+
+
 	private CommonDao commonDao;
 
 	public <T> List<T> loadAllEntities(Class<T> clazz) {
@@ -40,4 +41,5 @@ public class CommonService {
 	public void setCommonDao(CommonDao commonDao) {
 		this.commonDao = commonDao;
 	}
+
 }

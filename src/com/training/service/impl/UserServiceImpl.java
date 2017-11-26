@@ -44,6 +44,30 @@ public class UserServiceImpl implements UserService {
 		
 		return data;
 	}
+	@Override
+	public UserData queryUserByNameAndPassword(String name, String password) {
+		UserData data=new UserData();
+		List<UserData>userDatas=new ArrayList<UserData>();
+		Map<String, Object> fields = new HashMap<>();
+		fields.put(UserModel.NAME, name);
+		String newPassword =MD5Tools.MD5(name+password) ;
+		fields.put(UserModel.PASSWORD, newPassword);
+		List<UserModel> userModels=commonService.getEntitiesByFields(UserModel.class,fields);
+		if(null!=userModels){
+			for(UserModel user :userModels){
+				UserData userData=new UserData();
+				userData.setId(user.getId());
+				userData.setName(user.getName());
+				userData.setMobile(user.getMobile());
+				userData.setCreateDate(user.getCreateDate());
+				userData.setUpdateDate(user.getUpdateDate());
+				userDatas.add(userData);
+			}
+			data=userDatas.get(0);
+		}
+		
+		return data;
+	}
 	public UserDao getUserDao() {
 		return userDao;
 	}
@@ -56,5 +80,6 @@ public class UserServiceImpl implements UserService {
 	public void setCommonService(CommonService commonService) {
 		this.commonService = commonService;
 	}
+	
 
 }

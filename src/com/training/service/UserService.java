@@ -7,4 +7,6 @@ public interface UserService {
 
 	UserData queryUser(UserForm userForm);
 
+	UserData queryUserByNameAndPassword(String name, String password);
+
 }

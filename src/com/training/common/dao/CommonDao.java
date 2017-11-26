@@ -7,18 +7,39 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+
+import org.hibernate.Query;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.jdbc.core.JdbcTemplate;
+
+import com.training.page.Pagination;
+import com.training.page.SearchResult;
+
 public class CommonDao {
+
 	private SessionFactory sessionFactory;
 
 	private JdbcTemplate jdbcTemplate;
 
-	
+	private String name;
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 	public <T> void saveOrUpdateEntity(T entry) {
 		Session session = this.getSessionFactory().getCurrentSession();
@@ -90,7 +111,85 @@ public class CommonDao {
 		return criteria.list();
 	}
 
-	
+	public <T> SearchResult<T> getEntitiesByFieldWithPagination(Class<T> clazz, String field, Object value,
+			HashMap<String, String> orders, Pagination page) {
+		// 加限制的
+		Criteria criteria = this.getSessionFactory().getCurrentSession().createCriteria(clazz)
+				.add(Restrictions.eq(field, value));
+		List tempList = criteria.list();
+		page.setTotalCount(tempList.size());
+		int totalTemp = tempList.size() % page.getPageSize();
+		int totalTemp2 = tempList.size() / page.getPageSize();
+		page.setTotalPage(totalTemp == 0 ? totalTemp2 : (totalTemp2 + 1));
+
+		criteria.setFirstResult((page.getCurrentPage() - 1) * page.getPageSize());
+		criteria.setMaxResults(page.getPageSize());
+
+		if (orders != null && !orders.isEmpty()) {
+			Iterator it = orders.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, String> entry = (Map.Entry) it.next();
+				if (entry.getKey().toString().equalsIgnoreCase("ASC")) {
+
+					criteria.addOrder(Order.asc(entry.getValue()));
+				} else if (entry.getKey().toString().equalsIgnoreCase("DESC")) {
+					criteria.addOrder(Order.desc(entry.getValue()));
+				}
+			}
+		}
+
+		List list = criteria.list();
+
+		SearchResult<T> searchResult = new SearchResult<T>();
+		searchResult.setPagination(page);
+		searchResult.setResult(list);
+		return searchResult;
+	}
+
+	// 多个属性查询对象list
+	// public <T> SearchResult<T> getEntitiesByFields(Class<T> clazz,
+	// Map<String, Object> fields) {
+	// return getEntitiesByFields(clazz, fields, null, null);
+	// }
+
+	public <T> SearchResult<T> getEntitiesByFields(Class<T> clazz, Map<String, Object> fields,
+			HashMap<String, String> orders, Pagination page) {
+		Criteria criteria = this.getSessionFactory().getCurrentSession().createCriteria(clazz);
+
+		if (fields != null && !fields.isEmpty()) {
+			Iterator it = fields.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry entry = (Map.Entry) it.next();
+				criteria.add(Restrictions.eq((String) entry.getKey(), entry.getValue()));
+			}
+		}
+
+		List tempList = criteria.list();
+		page.setTotalCount(tempList.size());
+		int totalTemp = tempList.size() % page.getPageSize();
+		int totalTemp2 = tempList.size() / page.getPageSize();
+		page.setTotalPage(totalTemp == 0 ? totalTemp2 : (totalTemp2 + 1));
+
+		criteria.setFirstResult((page.getCurrentPage() - 1) * page.getPageSize());
+		criteria.setMaxResults(page.getPageSize());
+
+		if (orders != null && !orders.isEmpty()) {
+			Iterator it = orders.entrySet().iterator();
+			while (it.hasNext()) {
+				Map.Entry<String, String> entry = (Map.Entry) it.next();
+				if (entry.getKey().toString().equalsIgnoreCase("ASC")) {
+					criteria.addOrder(Order.asc(entry.getValue()));
+				} else if (entry.getKey().toString().equalsIgnoreCase("DESC")) {
+					criteria.addOrder(Order.desc(entry.getValue()));
+				}
+			}
+		}
+		List list = criteria.list();
+		SearchResult<T> searchResult = new SearchResult<T>();
+		searchResult.setPagination(page);
+		searchResult.setResult(list);
+		return searchResult;
+	}
 
 	public <T> List<T> getEntitiesByFields(Class<T> clazz, Map<String, Object> fields) {
 		Criteria criteria = this.getSessionFactory().getCurrentSession().createCriteria(clazz);
@@ -107,8 +206,51 @@ public class CommonDao {
 
 	}
 
-	
-	
+	// pagination data
+	public <T> SearchResult<T> search(String sql, Pagination page) {
+		return search(sql, page, null);
+	}
+
+	// pagination data
+	public <T> SearchResult<T> search(String sql, Pagination page, Map<String, Object> map) {
+		Session session = this.sessionFactory.getCurrentSession();//
+		Query query = session.createQuery(sql);
+		query.setProperties(map);
+		List tempList = query.list();
+		page.setTotalCount(tempList.size());
+		int totalTemp = tempList.size() % page.getPageSize();
+		int totalTemp2 = tempList.size() / page.getPageSize();
+		page.setTotalPage(totalTemp == 0 ? totalTemp2 : (totalTemp2 + 1));
+		query.setFirstResult((page.getCurrentPage() - 1) * page.getPageSize());
+		query.setMaxResults(page.getPageSize());
+		SearchResult<T> searchResult = new SearchResult<T>();
+		List<T> result = query.list();
+		searchResult.setPagination(page);
+		searchResult.setResult(result);
+		return searchResult;
+	}
+
+	// pagination data
+	public <T> SearchResult<T> search(String sql, Pagination page, Map<String, Object> params, Class clazz) {
+		Session session = this.sessionFactory.getCurrentSession();
+		Query query = session.createSQLQuery(sql).addEntity(clazz);
+		if (params != null && !params.isEmpty()) {
+			query.setProperties(params);
+		}
+		List tempList = query.list();
+		page.setTotalCount(tempList.size());
+		int totalTemp = tempList.size() % page.getPageSize();
+		int totalTemp2 = tempList.size() / page.getPageSize();
+		page.setTotalPage(totalTemp == 0 ? totalTemp2 : (totalTemp2 + 1));
+		query.setFirstResult((page.getCurrentPage() - 1) * page.getPageSize());
+		query.setMaxResults(page.getPageSize());
+		SearchResult<T> searchResult = new SearchResult<T>();
+		List<T> result = query.list();
+		searchResult.setPagination(page);
+		searchResult.setResult(result);
+		return searchResult;
+	}
+
 	// 根据ID查询 单个 对象
 	public <T> Object load(Class clazz, int id) {
 		return this.getSessionFactory().getCurrentSession().load(clazz, id);
@@ -135,3 +277,4 @@ public class CommonDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 }
+

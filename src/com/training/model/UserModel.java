@@ -7,6 +7,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+
 @Entity
 @Table(name = "user")
 public class UserModel {
@@ -78,6 +79,7 @@ public class UserModel {
 
 	public void setAvailable(Boolean available) {
 		this.available = available;
+
 	}
 
 }

@@ -7,7 +7,7 @@ public class UserForm {
 	private String password;
 	private String confirmPassword;
 	private boolean isNew;
-	private String verificationCode;
+	private String verifyCode;
 	private boolean rememberMe;
 	public Integer getId() {
 		return id;
@@ -45,11 +45,12 @@ public class UserForm {
 	public void setNew(boolean isNew) {
 		this.isNew = isNew;
 	}
-	public String getVerificationCode() {
-		return verificationCode;
+
+	public String getVerifyCode() {
+		return verifyCode;
 	}
-	public void setVerificationCode(String verificationCode) {
-		this.verificationCode = verificationCode;
+	public void setVerifyCode(String verifyCode) {
+		this.verifyCode = verifyCode;
 	}
 	public boolean isRememberMe() {
 		return rememberMe;
