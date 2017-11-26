@@ -26,10 +26,10 @@ public class StudentController {
 			@RequestParam(value = "currentPage", defaultValue = "1") int currentPage) {
 		Pagination page = new Pagination();
 		if (currentPage <= 0) {
-			currentPage = Integer.parseInt(Config.getStringProperty("page.currentPage"));
+			currentPage = Config.getProperty("page.currentPage", 1);
 		}
 		page.setCurrentPage(currentPage);
-		page.setPageSize(Integer.parseInt(Config.getStringProperty("page.pageSize")));
+		page.setPageSize(Config.getProperty("page.pageSize", 5));
 		SearchResult<StudentData> searchResult = studentService.findAll(studentForm, page);
 		model.addAttribute("searchResult", searchResult);
 		return "users/students";
