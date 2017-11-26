@@ -45,4 +45,23 @@ public class StudentController {
 		studentService.add(studentForm);
 		return "redirect:loadStudentsByFields";
 	}
+
+	@RequestMapping("/loadStudentById")
+	public String loadStudentById(Model model, Integer id) {
+		StudentData stuData = studentService.findById(id);
+		model.addAttribute("stuData", stuData);
+		return "users/edit";
+	}
+
+	@RequestMapping(value = "/updateStudentById", method = RequestMethod.POST)
+	public String updateStudentById(StudentForm studentForm) {
+		studentService.updateById(studentForm);
+		return "redirect:loadStudentsByFields";
+	}
+
+	@RequestMapping("/deleteStudentById")
+	public String deleteStudentById(Integer id) {
+		studentService.deleteById(id);
+		return "redirect:loadStudentsByFields";
+	}
 }
