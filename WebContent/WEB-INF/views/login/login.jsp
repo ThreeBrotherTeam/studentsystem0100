@@ -1,12 +1,36 @@
-<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+
+<%@ taglib uri="http://www.springframework.org/tags" prefix="spring" %>
+<%@ taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+    
+<!DOCTYPE html >
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Insert title here</title>
 </head>
 <body>
-
+	<h2>login</h2>
+	
+	<form:form action="login" method="post" commandName="userForm">
+		<font color="red"><form:errors path="name"/></font><br>
+		<spring:message code="user.name" />：<form:input path="name"/><br>
+		<c:if test="${not empty name}">
+			<font color="red">${name }</font>
+		</c:if>
+		<spring:message code="user.password" />：<form:password path="password"/><br>
+		<c:if test="${not empty password}">
+			<font color="red">${password }</font>
+		</c:if>
+		<spring:message code="user.verifyCode" />：<form:input path="verifyCode" />
+		<img alt="<spring:message code="user.wait" />" src="verifyCode"/><br>
+		
+		<spring:message code="user.rememberMe" />：<form:checkbox path="rememberMe"/><br>
+		<input type="submit" value="login"/>
+	</form:form>
+	
 </body>
 </html>
