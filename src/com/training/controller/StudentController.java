@@ -27,6 +27,7 @@ public class StudentController {
 		Pagination page = new Pagination();
 		if (currentPage <= 0) {
 			currentPage = Integer.parseInt(Config.getStringProperty("page.currentPage"));
+
 		}
 		page.setCurrentPage(currentPage);
 		page.setPageSize(Integer.parseInt(Config.getStringProperty("page.pageSize")));

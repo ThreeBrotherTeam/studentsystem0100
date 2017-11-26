@@ -7,6 +7,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Criteria;
+
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Order;
+import org.hibernate.criterion.Restrictions;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
