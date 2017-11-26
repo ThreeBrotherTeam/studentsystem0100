@@ -11,4 +11,10 @@ public interface StudentService {
 
 	void add(StudentForm studentForm);
 
+	StudentData findById(Integer id);
+
+	void updateById(StudentForm studentForm);
+
+	void deleteById(Integer id);
+
 }
