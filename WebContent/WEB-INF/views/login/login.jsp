@@ -25,8 +25,9 @@
 		<c:if test="${not empty password}">
 			<font color="red">${password }</font>
 		</c:if>
-		验证码:<form:input path="verifyCode" /><br>
-		<img class="verifyCodeImg" alt="" src="verifyCode"/><br>
+		<spring:message code="user.verifyCode" />：<form:input path="verifyCode" />
+		<img alt="<spring:message code="user.wait" />" src="verifyCode"/><br>
+		
 		<spring:message code="user.rememberMe" />：<form:checkbox path="rememberMe"/><br>
 		<input type="submit" value="login"/>
 	</form:form>
