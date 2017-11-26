@@ -14,7 +14,6 @@ import org.hibernate.criterion.Order;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.jdbc.core.JdbcTemplate;
 
-
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -277,4 +276,3 @@ public class CommonDao {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 }
-

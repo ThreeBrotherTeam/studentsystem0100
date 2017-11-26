@@ -7,7 +7,6 @@ import com.training.common.dao.CommonDao;
 
 public class CommonService {
 
-
 	private CommonDao commonDao;
 
 	public <T> List<T> loadAllEntities(Class<T> clazz) {

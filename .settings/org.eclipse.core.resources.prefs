@@ -1,6 +1,9 @@
 eclipse.preferences.version=1
 <<<<<<< HEAD
+<<<<<<< HEAD
 encoding//WebContent/WEB-INF/views/login/login.jsp=UTF-8
+=======
+>>>>>>> refs/remotes/origin/master
 =======
 >>>>>>> refs/remotes/origin/master
 encoding//resource/messages/base_zh_CN.properties=UTF-8
