@@ -12,8 +12,8 @@ import com.training.util.VerifyCodeUtils;
 
 @Controller
 public class VerifyCodeController {
+	
 	@RequestMapping("/verifyCode")
-
 	public void verifyCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
 		String verifyCode = VerifyCodeUtils.generateVerifyCode(4);
 		System.out.println(verifyCode);

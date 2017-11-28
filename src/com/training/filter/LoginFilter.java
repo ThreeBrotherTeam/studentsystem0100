@@ -13,18 +13,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
+import com.training.common.config.Config;
 import com.training.data.UserData;
 import com.training.service.UserService;
-
 
 public class LoginFilter implements Filter {
 
 	@Override
 	public void destroy() {
-		
 
 	}
 
@@ -35,58 +35,56 @@ public class LoginFilter implements Filter {
 		HttpServletResponse resp = (HttpServletResponse) response;
 		String uri = req.getRequestURI();
 
-		boolean hasLogin = true;
-		if (!(uri.contains("/login") || uri.contains("/js") || uri.contains("/logout")||uri.contains("/verifyCode")
-				|| uri.contains("/js")))
-		{
+		System.out.println("uri:" + uri);
+		String excludeUri = Config.getStringProperty("login.exclude.uri");
+		String[] excludeUriArray = StringUtils.split(excludeUri, ",");
+
+		if (null == excludeUriArray) {
+			// redirect
+			//req.getRequestDispatcher("login").forward(req, resp);
+			//说明都需要过滤
+			
+			
+			//这里要加逻辑
+			//1.判断sesison
+			//这里的代码重复了,
+
 			HttpSession session = req.getSession();
-			UserData user = (UserData) session.getAttribute("userData");
-			if (user == null)
-			{
-				Cookie[] cookie = req.getCookies();
-				Cookie rememberMe = null;
-				for (Cookie c : cookie)
-				{
-					if ("rememberMe".equals(c.getName()))
-					{
-						rememberMe = c;
-						break;
-					}
-				}
+			UserData data = (UserData) session.getAttribute("userData");
+			if (data == null) {
+				
+				//redirect 不要forward
+				resp.sendRedirect("login");
+			}else{
+				chain.doFilter(req, resp);
+			}
+			
+		} else {
 
-				UserData userData = null;
-				if (rememberMe != null)
-				{
-					String token = rememberMe.getValue();
-					String[] str = token.split("\\(\\-\\)");
-					String name = str[0];
-					String password = str[1];
-					WebApplicationContext ctx = WebApplicationContextUtils.getRequiredWebApplicationContext(req.getServletContext());
-					UserService userService = ctx.getBean(UserService.class);
-					userData = userService.queryUserByNameAndPassword(name, password);
+			boolean access = false;
+			for (String exuri : excludeUriArray) {
+				if (uri.contains(exuri)) {
+					access = true;
+					break;
 				}
+			}
 
-				if (userData == null)
-				{
-					hasLogin = false;
-				}
-				else
-				{
-					session.setAttribute("userModel", userData);
+			if (access) {
+				chain.doFilter(req, resp);
+			} else {
+				HttpSession session = req.getSession();
+				UserData data = (UserData) session.getAttribute("userData");
+				if (data == null) {
+					
+					//redirect 不要forward
+					resp.sendRedirect("login");
+				}else{
+					chain.doFilter(req, resp);
 				}
 			}
 
 		}
-
-		if (hasLogin)
-		{
-			chain.doFilter(req, resp);
-		}
-		else
-		{
-			resp.sendRedirect("login");
-		}
-
+		
 	}
 
 	@Override
