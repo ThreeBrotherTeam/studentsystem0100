@@ -31,16 +31,9 @@
 		<property name="studentConvert" ref="studentConvert"></property>
 	</bean>
 
-	<bean id="studentDao" class="com.training.dao.impl.StudentDaoImpl">
-		<property name="commonDao" ref="commonDao"/>
-	</bean>
 	
-	<bean id="studentConvert" class="com.training.convert.impl.StudentConvert"></bean>
 	
-	<bean id="studentService" class="com.training.service.impl.StudentServiceImpl">
-		<property name="studentDao" ref="studentDao"/>
-		<property name="commonService" ref="commonService"/>
-		<property name="studentConvert" ref="studentConvert"></property>
-	</bean>
-
+	
+	
+	
 </beans>
