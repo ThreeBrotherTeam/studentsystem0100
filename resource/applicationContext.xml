@@ -25,15 +25,14 @@
 	
 	<bean id="studentConvert" class="com.training.convert.impl.StudentConvert"></bean>
 	
+	<bean id="convertFrom2model" class="com.training.convert.impl.StudentConvertForm2Model"></bean>
+	
 	<bean id="studentService" class="com.training.service.impl.StudentServiceImpl">
 		<property name="studentDao" ref="studentDao"/>
 		<property name="commonService" ref="commonService"/>
-		<property name="studentConvert" ref="studentConvert"></property>
+		<property name="studentConvert" ref="studentConvert"/>
+		<property name="convertFrom2model" ref="convertFrom2model"/>
 	</bean>
 
-	
-	
-	
-	
-	
+
 </beans>
